@@ -1,9 +1,17 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include "stack.h"
+#include<string>
 using namespace std;
 #define Endl endl;
-// DataStructure implementation
-// stack2.h implementation
+// infix to postfix function
+string infixToPostfix(string expression)
+{
+    string postFix="";
+    for (int i = 0; i < expression.size(); ++i)
+    {
 
+    }
+}
 int main()
 {
 
