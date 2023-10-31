@@ -2,7 +2,7 @@
 using namespace std;
 #define Endl endl;
 // DataStructure implementation
-// stack.h implementation
+// stack2.h implementation
 
 int main()
 {
