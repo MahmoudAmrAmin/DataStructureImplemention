@@ -54,7 +54,8 @@ public:
     }
     void display()
     {
-        node * cur = top;
+        node * cur =  new node;
+        cur =top;
         while(cur !=   NULL)
         {
             cout<<cur ->item <<" " ;
