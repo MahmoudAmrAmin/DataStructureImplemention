@@ -24,6 +24,7 @@ public:
     void push_back(t element);
     void insertAtPosition(t pos , t element);
     void print();
+    int size();
 };
 
 template<class t> linked_list<t>::linked_list()
@@ -107,6 +108,9 @@ template<class t>void linked_list<t>::print()
         pri = pri->next;
     }
 }
+template<class t > int list<t>::size()
+{
+    return count;
 
-
+}
 #endif //DATASTRUCTURES_IMPLEMENT_LIST_H
