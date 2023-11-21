@@ -86,4 +86,38 @@ string infixToPostfix(string infix)
     }
     return postfix;
 }
+int eval_post(string postfix)
+{
+    int size = postfix.size();
+    stack<int>s;
+    int op1 ,op2 ,val;
+    for (int i = 0; i < size; ++i) {
+        if(isdigit(postfix[i]))
+        {
+            s.push(postfix[i]-'0');
+        }
+        else
+        {
+            op1=s.GetTop();s.pop();
+            op2 = s.GetTop();s.pop();
+            switch(postfix[i])
+            {
+                case '+':
+                    val = op1 +op2 ;break;
+                case '-':
+                    val= op1-op2;break;
+                case'/':
+                    val = op1 / op2 ;break;
+                case '%':
+                    val = op1 % op2;break;
+                case'*':
+                    val = op1 * op2 ;break;
+                case '^':
+                    val = op1 ^ op2;break;
+            }
+            s.push(val);
+        }
+    }
+    return s.GetTop();
+}
 */
