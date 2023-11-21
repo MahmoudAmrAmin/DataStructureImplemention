@@ -1,8 +1,7 @@
 /*
-int prec(char sy)
+int proced(char  op)
 {
-    switch(sy)
-    {
+    switch (op) {
         case '(':
             return 1;
         case ')':
@@ -11,73 +10,80 @@ int prec(char sy)
         case '-':
             return 3;
         case '*':
-        case '/':
+        case'/':
         case '%':
             return 4;
-        case'^':
+        case '^':
             return 5;
-        default :
-            return 0 ;
+        default:
+            return 0 ;    // this return mean this char is operand
     }
 }
-string  infixToPostfix(string infix ,string& postfix)
+string infixToPostfix(string infix)
 {
-    stack<char>s;
-    int size = infix.size();
-    int priority;// prec
-
-    infix+=')';
-    s.push('(');
-    int i =0 ,j =0;
     char ch ;
-    for(i =0 , j= 0;i<=size;i++)
-    {
-        switch (prec(infix[i])) {
-            case 1:
-                s.push(infix[i]);break;
-            case 2:
-                s.pop(ch);
+    string postfix ="";
+    stack<char>s;
+    infix +=')';
+    s.push('(');
+    int size = infix.size();
+    for (int i = 0; i < size; ++i) {
+        switch(proced(infix[i]))
+        {
+            case 1 :
+                s.push(infix[i]);
+                break;
+            case 2 :
+                ch = s.GetTop();
+                s.pop();
                 while(ch !='(')
                 {
                     postfix+=ch;
-                    s.pop(ch);
+                    ch = s.GetTop();
+                    s.pop();
                 }
                 break;
             case 3:
-                s.pop(ch);
-                while(prec(ch)>=3)
+                ch = s.GetTop();
+                s.pop();
+                while(proced(ch)>=3)
                 {
                     postfix+=ch;
-                    s.pop(ch);
+                    ch = s.GetTop();
+                    s.pop();
                 }
                 s.push(ch);
                 s.push(infix[i]);
                 break;
-            case 4 :
-                s.pop(ch);
-                while(prec(ch)>=4)
+            case 4:
+                ch = s.GetTop();
+                s.pop();
+                while(proced(ch)>=4)
                 {
                     postfix+=ch;
-                    s.pop(ch);
+                    ch = s.GetTop();
+                    s.pop();
                 }
                 s.push(ch);
                 s.push(infix[i]);
                 break;
-            case 5:
-                s.pop(ch);
-                while(prec(ch)==5)
+            case 5 :
+                ch = s.GetTop();
+                s.pop();
+                while(proced(ch)==3)
                 {
                     postfix+=ch;
-                    s.pop(ch);
+                    ch = s.GetTop();
+                    s.pop();
                 }
                 s.push(ch);
                 s.push(infix[i]);
                 break;
-            default :
+            default:
                 postfix+=infix[i];break;
+
         }
-
     }
-
+    return postfix;
 }
 */
