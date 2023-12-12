@@ -1,3 +1,5 @@
+#ifndef DATASTRUCTURES_IMPLEMENT_LIST_H
+#define DATASTRUCTURES_IMPLEMENT_LIST_H
 #include<iostream>
 using namespace std ;
 template<class t>class linked_list
@@ -197,6 +199,25 @@ template<class t> void linked_list<t>::removeByValue(t element)
     }
     else
     {
+        curr = head ;
+        pre = head -> next ;
+        while(curr != NULL )
+        {
+            if(curr ->item == element){break;}
+             pre = curr ;
+            curr = curr->next  ;
+        }
+        if(curr == NULL){cout<<"element not found"<<endl;return;}
+        else
+        {
+            pre->next = curr ->next ;
+            if(last == curr){
+                last = pre;
+                delete curr;
+                count --;
+            }
+        }
 
     }
 }
+#endif //DATASTRUCTURES_IMPLEMENT_LIST_H
