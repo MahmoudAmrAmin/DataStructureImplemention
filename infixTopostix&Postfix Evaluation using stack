@@ -1,0 +1,123 @@
+/*
+int proced(char  op)
+{
+    switch (op) {
+        case '(':
+            return 1;
+        case ')':
+            return 2;
+        case '+':
+        case '-':
+            return 3;
+        case '*':
+        case'/':
+        case '%':
+            return 4;
+        case '^':
+            return 5;
+        default:
+            return 0 ;    // this return mean this char is operand
+    }
+}
+string infixToPostfix(string infix)
+{
+    char ch ;
+    string postfix ="";
+    stack<char>s;
+    infix +=')';
+    s.push('(');
+    int size = infix.size();
+    for (int i = 0; i < size; ++i) {
+        switch(proced(infix[i]))
+        {
+            case 1 :
+                s.push(infix[i]);
+                break;
+            case 2 :
+                ch = s.GetTop();
+                s.pop();
+                while(ch !='(')
+                {
+                    postfix+=ch;
+                    ch = s.GetTop();
+                    s.pop();
+                }
+                break;
+            case 3:
+                ch = s.GetTop();
+                s.pop();
+                while(proced(ch)>=3)
+                {
+                    postfix+=ch;
+                    ch = s.GetTop();
+                    s.pop();
+                }
+                s.push(ch);
+                s.push(infix[i]);
+                break;
+            case 4:
+                ch = s.GetTop();
+                s.pop();
+                while(proced(ch)>=4)
+                {
+                    postfix+=ch;
+                    ch = s.GetTop();
+                    s.pop();
+                }
+                s.push(ch);
+                s.push(infix[i]);
+                break;
+            case 5 :
+                ch = s.GetTop();
+                s.pop();
+                while(proced(ch)==3)
+                {
+                    postfix+=ch;
+                    ch = s.GetTop();
+                    s.pop();
+                }
+                s.push(ch);
+                s.push(infix[i]);
+                break;
+            default:
+                postfix+=infix[i];break;
+
+        }
+    }
+    return postfix;
+}
+int eval_post(string postfix)
+{
+    int size = postfix.size();
+    stack<int>s;
+    int op1 ,op2 ,val;
+    for (int i = 0; i < size; ++i) {
+        if(isdigit(postfix[i]))
+        {
+            s.push(postfix[i]-'0');
+        }
+        else
+        {
+            op1=s.GetTop();s.pop();
+            op2 = s.GetTop();s.pop();
+            switch(postfix[i])
+            {
+                case '+':
+                    val = op1 +op2 ;break;
+                case '-':
+                    val= op1-op2;break;
+                case'/':
+                    val = op1 / op2 ;break;
+                case '%':
+                    val = op1 % op2;break;
+                case'*':
+                    val = op1 * op2 ;break;
+                case '^':
+                    val = op1 ^ op2;break;
+            }
+            s.push(val);
+        }
+    }
+    return s.GetTop();
+}
+*/
