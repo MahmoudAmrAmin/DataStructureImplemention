@@ -41,15 +41,15 @@ template<class t> bool Binary_Tree<t>::is_leaf(node<t> *n)
 }
 template<class t> void Binary_Tree<t>::search(t element)
 {
-    node<t> * parent =tree, *temp =tree;
-    string path =" ";
+    node<t> * parent =tree;node<t> *temp =tree;
+    string path ="";
     if(empty()){cout<<"tree is empty "<<endl;return;}
     else
     {
         path +="root" ;
         while( temp != NULL && temp ->item != element)
         {
-            parent = temp;
+            //parent = temp;
             if(element > temp -> item)
             {
                 if(temp ->right != NULL ) {
@@ -61,12 +61,13 @@ template<class t> void Binary_Tree<t>::search(t element)
             {
                 if(temp -> left != NULL)
                 {
-                    temp += " left path";
+                    temp = temp ->left;
+                    path += " -> leftPath";
                 }
             }
         }
-        if(temp == NULL){cout<<"element not found"<<endl;return;}
-        cout<<path<<endl;
+        if(temp == NULL){cout<<"element not found"<<endl;}
+        else {cout<<path<<endl;}
     }
 }
 template<class t>void Binary_Tree<t>::free_BST(node<t> *n)
@@ -165,6 +166,80 @@ template<class t>  node<t>::node(t item)
 {
     this ->item = item ;
     right = left = NULL;
+}
+
+template<class t> bool Binary_Tree<t>::delete_node(t element)
+{
+    node<t> * parent =tree,*temp=tree;
+    char child = 'L';
+    while(temp != NULL && temp -> item != element)
+    {
+        parent = temp;
+        if(temp ->item < element)
+        {
+            if(temp -> right != NULL)
+            {
+                temp = temp ->right ;
+                child = 'R';
+            }
+        }
+        else
+        {
+            if(temp -> left!= NULL)
+            {
+                temp = temp ->left ;
+                child = 'L';
+            }
+        }
+    }
+    if(temp ==NULL){cout<<"this element not found "<<endl;return false ; }
+    // if node has 2 child swap with min of right subtree
+    while(temp ->left != NULL && temp ->right != NULL)
+    {
+        node<t> * newLeft = temp ->right;
+        child = 'R';
+        parent = temp;
+
+        while(newLeft ->left != NULL)
+        {
+            parent = newLeft ;
+            newLeft =newLeft->left ;
+            child = 'L';
+        }
+        swap(temp->item , newLeft->item);
+        temp = newLeft;
+    }
+    // if node hasn't children
+    if(is_leaf(temp))
+    {
+        // if node is root
+        if(temp == tree)
+        {
+            tree = NULL ;
+        }
+        else
+        {
+            child =='L' ?parent ->left = NULL :parent ->right =NULL ;
+        }
+    }
+    // if node has one child
+    node<t> * oneChild = (temp ->left ==NULL)?temp ->right :temp->left ;
+    // check if is root
+    if(temp ==tree)
+    {
+        tree = NULL ;
+    }
+    else
+    {
+        child == 'L' ? parent ->left = oneChild :parent->right = oneChild ;
+    }
+    delete temp;
+    return true ;
+}
+
+template<class t> node<t>* Binary_Tree <t>::get_tree()
+{
+    return tree ;
 }
 
 #endif //DATASTRUCTURES_IMPLEMENT_BINARYTREE_H
