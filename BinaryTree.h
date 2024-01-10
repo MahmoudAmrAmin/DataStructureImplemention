@@ -1,245 +1,243 @@
 //
-// Created by mahmod on 12/19/2023.
+// Created by mahmod on 1/10/2024.
 //
 
-#ifndef DATASTRUCTURES_IMPLEMENT_BINARYTREE_H
-#define DATASTRUCTURES_IMPLEMENT_BINARYTREE_H
+#ifndef FINAL_IMP_TREE_H
+#define FINAL_IMP_TREE_H
 #include<iostream>
-using namespace std ;
-
-template<class t>class node
-{
-public:
-    t item ;
-    node * right ,*left ;
-    node(t item);
-};
-
-template<class t>class Binary_Tree
+#include<queue>
+using namespace std;
+template<class t>class Tree
 {
 private:
-    node<t> * tree;
-public:
-    Binary_Tree();
-    ~Binary_Tree();
-    node<t>* get_tree();
-    void free_BST(node<t>*);
-    void insert(node<t>* n  , t element);
-    bool is_leaf(node<t>*n);
-    void preorder_traversal(node<t>*n);
-    void inorder_traversal(node<t>*n);
-    void postorder_traversal(node<t>*n);
-    void search(t element);
-    bool delete_node(t element);
-    bool empty();
-
-};
-// binary search  methods
-template<class t> bool Binary_Tree<t>::is_leaf(node<t> *n)
-{
-    return n->right == NULL && n->left == NULL;
-}
-template<class t> void Binary_Tree<t>::search(t element)
-{
-    node<t> * parent =tree;node<t> *temp =tree;
-    string path ="";
-    if(empty()){cout<<"tree is empty "<<endl;return;}
-    else
+    struct node
     {
-        path +="root" ;
-        while( temp != NULL && temp ->item != element)
+        t item ;
+        node * left_child;
+        node * right_child ;
+        node(t value)
         {
-            //parent = temp;
-            if(element > temp -> item)
-            {
-                if(temp ->right != NULL ) {
-                    temp = temp->right;
-                    path +=" ->right path";
-                }
-            }
-            else
-            {
-                if(temp -> left != NULL)
-                {
-                    temp = temp ->left;
-                    path += " -> leftPath";
-                }
-            }
+            item = value ;
+            left_child =NULL ;
+            right_child = NULL;
         }
-        if(temp == NULL){cout<<"element not found"<<endl;}
-        else {cout<<path<<endl;}
-    }
-}
-template<class t>void Binary_Tree<t>::free_BST(node<t> *n)
-{
-    if(empty()){ return;}
-    free_BST(n ->left);
-    free_BST(n ->right);
-    delete n;
-}
-template<class t> Binary_Tree<t>::Binary_Tree()
-{
-    tree = NULL ;
-}
-template<class t> Binary_Tree<t>::~Binary_Tree()
-{
-    free_BST(tree);
-}
-template<class t> bool Binary_Tree<t>::empty()
+    };
+    node * tree ;
+public:
+    Tree();
+    ~Tree();
+    void free_BST(node * x);
+    node * get_tree(){return tree;}
+    void insert( node * x , t value);
+    void pre_order(node * x);
+    void in_order(node * x);
+    void post_order(node * x);
+    void printLevelOrder(node* root);
+    bool is_leaf(node * n);
+    void search(t value);
+    bool empty();
+    bool deleteNode(t value);
+};
+//check if tree is empty
+template<class t> bool Tree<t>::empty()
 {
     return tree == NULL ;
 }
-
-template<class t> void Binary_Tree<t>::insert(node<t> *n, t element)
+// constructor
+template<class t> Tree<t>::Tree()
 {
-    if(empty())
+    tree = NULL;
+}
+// delete all node from x to leaf
+template<class t>void Tree<t>::free_BST(node * x )
+{
+    if(x == NULL){return ; }
+    free_BST(x->left_child);
+    free_BST(x->right_child);
+    delete x ;
+}
+//destructor
+
+template<class t> Tree<t>::~Tree()
+{
+    free_BST(tree);
+}
+// insert
+template<class t> void Tree<t>::insert(Tree::node *x, t value)
+{
+    if(tree == NULL)
     {
-        tree = new node(element);
-        return ;
+        tree = new node(value);return;
     }
-    if(n->item == element){cout<<"already in tree"<<endl;return;}
-    if(n != NULL)
+    if(x -> item == value)
     {
-        if(element > n->item)
+        cout<<"element already exist"<<endl;
+    }
+    else if(x->item > value)
+    {
+        if(x->left_child != NULL)
         {
-            if(n ->right != NULL)
-                insert(n->right , element);
-            else
-                n->right = new node(element);
+            insert(x -> left_child ,value);
         }
         else
         {
-            if(n ->left != NULL)
-                insert(n->left ,element);
-            else
-                n->left =new node(element);
+            x->left_child = new node (value);
         }
-    }
-
-}
-template<class t>void Binary_Tree<t>::preorder_traversal(node<t> * n )
-{
-    if(empty())
-    {
-        cout<<"tree is empty"<<endl;
-        return;
-    }
-    if(n != NULL)    // base case of recursion
-    {
-        cout<<n->item<<"|"; // visited root
-        preorder_traversal(n->left);
-        preorder_traversal(n->right);
-    }
-}
-
-template<class t> void Binary_Tree<t>::inorder_traversal(node<t> *n)
-{
-    if(empty())
-    {
-        cout<<"tree is empty"<<endl;
-        return ;
-    }
-    if(n != NULL)
-    {
-        inorder_traversal(n -> left);
-        cout<<n->item<<"|";// visited root
-        inorder_traversal(n ->right);
-    }
-}
-
-template<class t>void Binary_Tree<t>::postorder_traversal(node<t> *n)
-{
-    if(empty())
-    {
-        cout<<"tree is empty"<<endl;
-        return ;
-    }
-    if( n != NULL)
-    {
-        postorder_traversal(n -> left);
-        postorder_traversal(n ->rigth);
-        cout<<n ->item <<"|"; // visited root
-    }
-}
-//class node methods
-template<class t>  node<t>::node(t item)
-{
-    this ->item = item ;
-    right = left = NULL;
-}
-
-template<class t> bool Binary_Tree<t>::delete_node(t element)
-{
-    node<t> * parent =tree,*temp=tree;
-    char child = 'L';
-    while(temp != NULL && temp -> item != element)
-    {
-        parent = temp;
-        if(temp ->item < element)
-        {
-            if(temp -> right != NULL)
-            {
-                temp = temp ->right ;
-                child = 'R';
-            }
-        }
-        else
-        {
-            if(temp -> left!= NULL)
-            {
-                temp = temp ->left ;
-                child = 'L';
-            }
-        }
-    }
-    if(temp ==NULL){cout<<"this element not found "<<endl;return false ; }
-    // if node has 2 child swap with min of right subtree
-    while(temp ->left != NULL && temp ->right != NULL)
-    {
-        node<t> * newLeft = temp ->right;
-        child = 'R';
-        parent = temp;
-
-        while(newLeft ->left != NULL)
-        {
-            parent = newLeft ;
-            newLeft =newLeft->left ;
-            child = 'L';
-        }
-        swap(temp->item , newLeft->item);
-        temp = newLeft;
-    }
-    // if node hasn't children
-    if(is_leaf(temp))
-    {
-        // if node is root
-        if(temp == tree)
-        {
-            tree = NULL ;
-        }
-        else
-        {
-            child =='L' ?parent ->left = NULL :parent ->right =NULL ;
-        }
-    }
-    // if node has one child
-    node<t> * oneChild = (temp ->left ==NULL)?temp ->right :temp->left ;
-    // check if is root
-    if(temp ==tree)
-    {
-        tree = NULL ;
     }
     else
     {
-        child == 'L' ? parent ->left = oneChild :parent->right = oneChild ;
+        if(x -> right_child != NULL)
+        {
+            insert(x-> right_child ,value);
+        }
+        else
+        {
+            x->right_child = new node(value);
+        }
+    }
+}
+// pre_order traversal
+template<class t> void Tree<t>::pre_order(Tree::node *x)
+{
+    if( tree== NULL){cout<<"tree is empty"<<endl;return;}
+    if(x != NULL){
+    cout<<x->item<<" ";
+    pre_order(x->left_child);
+    pre_order(x->right_child);
+    }
+}
+template<class t> void Tree<t>::in_order(Tree::node *x)
+{
+    if( tree== NULL){cout<<"tree is empty"<<endl;return;}
+    if(x != NULL){
+        in_order(x->left_child);
+        cout<<x->item<<" "; // root
+        in_order(x->right_child);
+    }
+}
+template<class t> void Tree<t>::post_order(Tree::node *x)
+{
+    if( tree== NULL){cout<<"tree is empty"<<endl;return;}
+    if(x != NULL){
+        post_order(x->left_child);
+        post_order(x->right_child);
+        cout<<x->item<<" "; // root
+    }
+}
+
+template<class t>void Tree<t> ::printLevelOrder(node * root)
+{
+    // Base Case
+    if (root == NULL)
+        return;
+
+    // Create an empty queue for level order traversal
+    queue<node*> q;
+
+    // Enqueue Root and initialize height
+    q.push(root);
+
+    while (q.empty() == false) {
+
+        // Print front of queue and remove it from queue
+        node * ode = q.front();
+        cout << ode->item<< " ";
+        q.pop();
+
+        // Enqueue left child
+        if (ode->left_child != NULL)
+            q.push(ode->left_child);
+
+        // Enqueue right child
+        if (ode->right_child != NULL)
+            q.push(ode->right_child);
+    }
+}
+// check if this node is leaf or no
+template<class t> bool Tree<t>::is_leaf(Tree::node *n)
+{
+    return n->right_child == NULL && n->left_child == NULL;
+}
+
+// search by value
+template<class t> void Tree<t>::search(t value)
+{
+    string path ="";
+    node * temp = tree ;
+    node * parent = tree ;
+    if(temp == NULL){cout<<"tree is empty"<<endl;return;}
+    else
+    {
+        path += "root";
+        while(temp != NULL && temp -> item != value)
+        {
+            parent = temp;
+            if(value > temp->item )
+            {
+                temp = temp->right_child;
+                path+= "->right";
+            }
+            else
+            {
+                temp = temp ->left_child;
+                path += "->left";
+            }
+        }
+    }
+    if(temp == NULL){cout<<"element doesn't found"<<endl;return;}
+    cout<<path;
+}
+// delete node by value
+template<class t>bool Tree<t>::deleteNode(t value)
+{
+    char child ='L';
+    node * temp = tree ;
+    node * parent = tree ;
+    while(temp != NULL &&temp -> item != value)
+    {
+        parent = temp ;
+        if(temp ->item > value)
+        {
+            temp = temp->left_child;
+        }
+        else
+        {
+            temp = temp ->right_child ;
+            child ='R';
+        }
+    }
+    if(temp == NULL){cout<<"element not found"<<endl;return false ;}
+    // the node will delete has to child
+    while(temp->right_child != NULL &&temp->left_child != NULL)
+    {
+        node * newLeft = temp ->right_child;
+        parent = temp;
+        child = 'R';
+        while(newLeft->left_child != NULL)
+        {
+            parent = newLeft ;
+            newLeft = newLeft ->left_child;
+            child = 'L';
+        }
+        swap(temp ->item , newLeft ->item);
+        temp = newLeft;
+    }
+    if(is_leaf(temp))
+    {
+        if(temp == tree ){tree = NULL;}
+        else{(child =='L') ? parent ->left_child = NULL :parent ->right_child =NULL ; }
+    }
+    node * oneChild = (temp ->left_child == NULL)?temp->right_child : temp ->left_child ;
+    if(temp == tree)
+    {
+        tree = oneChild ;
+    }
+    else
+    {
+        (child == 'L')?parent ->left_child = oneChild :parent->right_child = oneChild ;
     }
     delete temp;
     return true ;
 }
 
-template<class t> node<t>* Binary_Tree <t>::get_tree()
-{
-    return tree ;
-}
-
-#endif //DATASTRUCTURES_IMPLEMENT_BINARYTREE_H
+#endif //FINAL_IMP_TREE_H
